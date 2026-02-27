@@ -59,9 +59,9 @@ This project is open source and available for personal and commercial use.
 
 ## 📞 Contact
 
-- **Phone:** 9002735239
+- **Phone:** +91 8389873317
 - **Email:** rohitprasadyadav06@gmail.com
-- **WhatsApp:** [Chat with us](https://wa.me/919002735239)
+- **WhatsApp:** [Chat with us](https://wa.me/+91 8389873317)
 
 ---
 
