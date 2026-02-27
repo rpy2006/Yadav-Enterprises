@@ -61,7 +61,7 @@ This project is open source and available for personal and commercial use.
 
 - **Phone:** +91 8389873317
 - **Email:** rohitprasadyadav06@gmail.com
-- **WhatsApp:** [Chat with us](https://wa.me/+91 8389873317)
+- **WhatsApp:** [Chat with us](https://wa.me/8389873317)
 
 ---
 
