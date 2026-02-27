@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>Product JS generator · Yadav Enterprises</title>
+    <!-- Font Awesome 6 (free) same as main site -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Poppins + Noto Sans (matching previous theme) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ----- DESIGN TOKENS (exactly as main site) ----- */
+        :root {
+            --saffron:   #F5900A;
+            --gold:      #FFBE00;
+            --green:     #1E6B45;
+            --green-lt:  #2A8A58;
+            --cream:     #FFF9F0;
+            --warm-white:#FFFDF8;
+            --brown:     #5C3A1E;
+            --text:      #1A1A1A;
+            --text-muted:#6B6B6B;
+            --border:    #EDE0CC;
+            --card-bg:   #FFFFFF;
+            --shadow:    0 2px 16px rgba(90,40,0,0.10);
+            --shadow-lg: 0 8px 40px rgba(90,40,0,0.16);
+            --radius:    16px;
+            --radius-sm: 10px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        /* ----- header (matches Yadav header gradient) ----- */
+        .theme-header {
+            background: linear-gradient(135deg, var(--green) 0%, #154d31 100%);
+            color: white;
+            border-radius: 40px 40px 20px 20px;
+            padding: 1rem 1.8rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .logo-square {
+            width: 44px;
+            height: 44px;
+            background: var(--gold);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            font-weight: 900;
+            color: var(--green);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .header-text h2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 1.3rem;
+            line-height: 1.2;
+        }
+        .header-text p {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.75);
+            letter-spacing: 0.3px;
+        }
+
+        .theme-badge {
+            background: var(--saffron);
+            color: var(--brown);
+            padding: 0.5rem 1.4rem;
+            border-radius: 40px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+
+        /* ----- main grid (fully responsive) ----- */
+        .builder-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.7fr;
+            gap: 1.8rem;
+            margin-bottom: 2rem;
+        }
+
+        /* ----- form card (matches product card style) ----- */
+        .form-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 1.8rem 1.5rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            height: fit-content;
+        }
+
+        .form-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--green);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 0.3rem;
+        }
+        .form-card h3 i {
+            color: var(--saffron);
+        }
+
+        .form-sub {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-left: 4px solid var(--saffron);
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-field {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-field label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--brown);
+            margin-bottom: 0.3rem;
+        }
+        .input-field label i {
+            color: var(--saffron);
+            width: 18px;
+        }
+
+        .input-field input, .input-field select, .input-field textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: var(--warm-white);
+            border: 1.8px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: 'Noto Sans', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .input-field input:focus, .input-field select:focus, .input-field textarea:focus {
+            border-color: var(--saffron);
+            box-shadow: 0 0 0 3px rgba(245,144,10,0.15);
+            outline: none;
+            background: white;
+        }
+
+        .price-cat-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--green);
+            color: white;
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: 40px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex: 1 1 auto;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 14px rgba(30,107,69,0.4);
+            border: 1px solid var(--green-lt);
+        }
+        .btn-primary:hover {
+            background: var(--green-lt);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(30,107,69,0.5);
+        }
+
+        .btn-secondary {
+            background: var(--cream);
+            color: var(--brown);
+            border: 2px solid var(--border);
+            padding: 0.9rem 1.5rem;
+            border-radius: 40px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+            justify-content: center;
+        }
+        .btn-secondary:hover {
+            border-color: var(--saffron);
+            background: white;
+        }
+
+        .helper-note {
+            background: var(--cream);
+            border-radius: 40px;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            display: inline-block;
+            border: 1px dashed var(--border);
+        }
+
+        /* ----- right panel (code + preview) fully themed ----- */
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+
+        .code-card {
+            background: #1E1E2A;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            border: 2px solid var(--saffron);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        .code-header span {
+            background: var(--saffron);
+            color: var(--brown);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            padding: 0.4rem 1.4rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 0.7rem;
+            flex-wrap: wrap;
+        }
+        .copy-btn, .download-btn {
+            background: var(--gold);
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: 1px solid #e0aa00;
+            color: #1e2a1e;
+        }
+        .copy-btn:hover, .download-btn:hover {
+            background: #f0b800;
+            transform: scale(1.02);
+        }
+        .download-btn {
+            background: #e8d49a;
+            border-color: #c9a53b;
+        }
+
+        pre {
+            background: #2a2a38;
+            padding: 1.2rem;
+            border-radius: var(--radius-sm);
+            color: #D7F0D0;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            border: 1px solid var(--saffron);
+            max-height: 270px;
+        }
+
+        .preview-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+        .preview-card h4 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1.2rem;
+            font-size: 1.1rem;
+        }
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 0.8rem;
+            max-height: 260px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .mini-item {
+            background: var(--cream);
+            border-radius: 12px;
+            padding: 0.7rem;
+            border: 1px solid var(--border);
+            font-size: 0.7rem;
+        }
+        .mini-item .cat {
+            color: var(--saffron);
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.6rem;
+        }
+        .mini-item .name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .mini-item .price {
+            color: var(--green);
+            font-weight: 800;
+            margin-top: 2px;
+        }
+        .item-count {
+            margin-top: 0.8rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .footer-note {
+            background: linear-gradient(135deg, var(--green) 0%, #0f3d23 100%);
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            padding: 1.8rem;
+            border-radius: 60px 60px 30px 30px;
+            font-size: 0.85rem;
+            border: 1px solid #3f7a5a;
+        }
+        .footer-note i {
+            color: var(--gold);
+        }
+
+        /* ----- responsive breakpoints ----- */
+        @media screen and (max-width: 950px) {
+            .builder-grid {
+                grid-template-columns: 1fr;
+                gap: 1.8rem;
+            }
+            .theme-header {
+                flex-direction: column;
+                align-items: start;
+            }
+        }
+        @media screen and (max-width: 550px) {
+            body { padding: 0.5rem; }
+            .price-cat-row {
+                grid-template-columns: 1fr;
+            }
+            .button-group {
+                flex-direction: column;
+            }
+            .code-header {
+                flex-direction: column;
+                align-items: start;
+            }
+            .preview-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .theme-badge {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .empty-preview {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+        }
+
+        .code-placeholder {
+            color: #a99f8f;
+            font-style: italic;
+            text-align: center;
+            padding: 1.5rem;
+            background: #232330;
+            border-radius: var(--radius-sm);
+        }
+        
+        /* Toast message styling */
+        .copy-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--green);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 9999;
+            animation: fadeInOut 2s ease forwards;
+            border: 2px solid var(--gold);
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, 20px); }
+            15% { opacity: 1; transform: translate(-50%, 0); }
+            85% { opacity: 1; transform: translate(-50%, 0); }
+            100% { opacity: 0; transform: translate(-50%, -20px); }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- header – 100% Yadav Enterprises theme -->
+    <div class="theme-header">
+        <div class="logo-area">
+            <div class="logo-square">YE</div>
+            <div class="header-text">
+                <h2>Yadav Enterprises</h2>
+                <p>product code generator</p>
+            </div>
+        </div>
+        <div class="theme-badge">
+            <i class="fas fa-code"></i> <span>name • price • category • image • desc</span>
+        </div>
+    </div>
+
+    <!-- main responsive grid -->
+    <div class="builder-grid">
+        <!-- left form -->
+        <div class="form-card">
+            <h3><i class="fas fa-pen-fancy"></i> add product</h3>
+            <div class="form-sub"><i class="fas fa-arrow-right" style="color:var(--saffron);"></i> fill all fields, id auto‑generated</div>
+
+            <div class="input-field">
+                <label><i class="fas fa-tag"></i> product name</label>
+                <input type="text" id="prodName" placeholder="e.g. Aashirvaad Atta (5kg)" value="Aashirvaad Atta (5kg)">
+            </div>
+
+            <div class="price-cat-row">
+                <div class="input-field">
+                    <label><i class="fas fa-rupee-sign"></i> price (₹)</label>
+                    <input type="number" id="prodPrice" placeholder="280" value="280" min="1" step="1">
+                </div>
+                <div class="input-field">
+                    <label><i class="fas fa-list"></i> category</label>
+                    <select id="prodCategory">
+                        <option value="Groceries" selected>Groceries</option>
+                        <option value="Dairy">Dairy</option>
+                        <option value="Snacks">Snacks</option>
+                        <option value="Beverages">Beverages</option>
+                        <option value="Stationery">Stationery</option>
+                        <option value="Personal Care">Personal Care</option>
+                        <option value="Household">Household</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-field">
+                <label><i class="fas fa-image"></i> image URL</label>
+                <input type="url" id="prodImage" placeholder="https://..." value="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400&q=80">
+            </div>
+
+            <div class="input-field">
+                <label><i class="fas fa-align-left"></i> description</label>
+                <textarea id="prodDesc" rows="2">Premium whole wheat flour for soft rotis</textarea>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-primary" id="addProductBtn"><i class="fas fa-cart-plus"></i> add to list</button>
+                <button class="btn-secondary" id="resetDemoBtn"><i class="fas fa-undo-alt"></i> reset</button>
+            </div>
+            <div class="helper-note"><i class="fas fa-info-circle"></i> id = max existing + 1</div>
+        </div>
+
+        <!-- right panel: code + preview -->
+        <div class="right-panel">
+            <!-- code block with copy and download buttons -->
+            <div class="code-card">
+                <div class="code-header">
+                    <span><i class="fas fa-brackets-curly"></i> PRODUCTS array (JS)</span>
+                    <div class="action-buttons">
+                        <button class="copy-btn" id="copyCodeBtn"><i class="far fa-copy"></i> copy code</button>
+                        <button class="download-btn" id="downloadBtn"><i class="fas fa-download"></i> download .js</button>
+                    </div>
+                </div>
+                <pre id="jsCodePreview"><div class="code-placeholder"><i class="fas fa-arrow-up"></i> add items to generate code</div></pre>
+                <div style="color:#aaa; font-size:0.75rem; margin-top: 8px;"><i class="fas fa-check-circle" style="color:#58d68d;"></i> paste into main website script or download as file</div>
+            </div>
+
+            <!-- live preview card -->
+            <div class="preview-card">
+                <h4><i class="fas fa-eye" style="color:var(--saffron);"></i> live preview</h4>
+                <div class="preview-grid" id="livePreviewGrid">
+                    <div class="empty-preview"><i class="fas fa-box-open"></i> no products yet, add some</div>
+                </div>
+                <div class="item-count" id="itemCount"><i class="far fa-file"></i> 0 items</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- footer with theme -->
+    <div class="footer-note">
+        <i class="fas fa-leaf"></i> generated code matches Yadav Enterprises theme • <strong>name, price, category, image, description</strong> • fully responsive
+        <div style="margin-top:6px;"><i class="fas fa-mobile-alt"></i> works on any device</div>
+    </div>
+</div>
+
+<!-- Hidden textarea for fallback copy method -->
+<textarea id="hiddenCopyTextarea" style="position: fixed; opacity: 0; pointer-events: none; z-index: -1;"></textarea>
+
+<script>
+    (function() {
+        // ---------- start with EMPTY product list ----------
+        let products = [];
+
+        // DOM elements
+        const jsCodePre = document.getElementById('jsCodePreview');
+        const liveGrid = document.getElementById('livePreviewGrid');
+        const itemCountSpan = document.getElementById('itemCount');
+        const prodName = document.getElementById('prodName');
+        const prodPrice = document.getElementById('prodPrice');
+        const prodCategory = document.getElementById('prodCategory');
+        const prodImage = document.getElementById('prodImage');
+        const prodDesc = document.getElementById('prodDesc');
+        const copyBtn = document.getElementById('copyCodeBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        
+        // Hidden textarea for fallback
+        const hiddenTextarea = document.getElementById('hiddenCopyTextarea');
+
+        function getNextId() {
+            return products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
+        }
+
+        // generate JS string (single quotes, image URLs in double quotes)
+        function generateJSString(arr) {
+            if (arr.length === 0) return '';
+            const str = JSON.stringify(arr, null, 2)
+                .replace(/"([^"]+)":/g, '$1:')              // remove quotes around keys
+                .replace(/"/g, "'")                          // double to single
+                .replace(/image: '(.*?)'/g, 'image: "$1"');  // restore double for image url
+            return `const PRODUCTS = ${str};`;
+        }
+
+        function refreshAll() {
+            // live preview
+            if (products.length === 0) {
+                liveGrid.innerHTML = '<div class="empty-preview"><i class="fas fa-box-open"></i> no products yet, add some</div>';
+                itemCountSpan.innerHTML = '<i class="far fa-file"></i> 0 items';
+                jsCodePre.innerHTML = '<div class="code-placeholder"><i class="fas fa-arrow-up"></i> add items to generate code</div>';
+            } else {
+                let html = '';
+                products.slice(0, 30).forEach(p => {
+                    html += `<div class="mini-item">
+                        <div class="cat"><i class="fas fa-circle" style="font-size: 0.3rem; color:var(--saffron);"></i> ${p.category}</div>
+                        <div class="name">${p.name}</div>
+                        <div class="price">₹${p.price}</div>
+                        <div style="color:var(--text-muted); font-size:0.6rem;">${p.desc.substring(0,20)}${p.desc.length>20?'…':''}</div>
+                    </div>`;
+                });
+                liveGrid.innerHTML = html;
+                itemCountSpan.innerHTML = `<i class="fas fa-cube"></i> ${products.length} product${products.length!==1?'s':''} · last id ${products[products.length-1].id}`;
+
+                // generate and display actual JS code
+                const codeString = generateJSString(products);
+                jsCodePre.innerText = codeString;
+            }
+        }
+
+        function addProduct() {
+            const name = prodName.value.trim();
+            const price = parseFloat(prodPrice.value);
+            const category = prodCategory.value;
+            const image = prodImage.value.trim();
+            const desc = prodDesc.value.trim();
+
+            if (!name || isNaN(price) || price <= 0 || !image || !desc) {
+                alert('❌ please fill all fields correctly (price > 0)');
+                return;
+            }
+
+            products.push({
+                id: getNextId(),
+                name, price, category, image, desc
+            });
+
+            refreshAll();
+
+            // clear fields for next entry
+            prodName.value = '';
+            prodPrice.value = '';
+            prodImage.value = '';
+            prodDesc.value = '';
+            prodCategory.value = 'Groceries';
+        }
+
+        function resetDefault() {
+            products = [];
+            refreshAll();
+        }
+
+        // Function to show toast message
+        function showToast(message, isSuccess = true) {
+            const toast = document.createElement('div');
+            toast.className = 'copy-toast';
+            toast.style.background = isSuccess ? 'var(--green)' : '#d32f2f';
+            toast.innerHTML = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 2000);
+        }
+
+        // BULLETPROOF COPY FUNCTION - multiple fallback methods
+        function copyCode() {
+            if (products.length === 0) {
+                showToast('⚠️ No products to copy. Add items first.', false);
+                return;
+            }
+            
+            const code = generateJSString(products);
+            
+            // METHOD 1: Modern Clipboard API (with fallbacks)
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(code)
+                    .then(() => {
+                        showToast('✅ Code copied to clipboard!');
+                        // Visual feedback on button
+                        const original = copyBtn.innerHTML;
+                        copyBtn.innerHTML = '<i class="fas fa-check"></i> copied!';
+                        copyBtn.style.background = '#2ecc71';
+                        copyBtn.style.color = 'white';
+                        setTimeout(() => {
+                            copyBtn.innerHTML = original;
+                            copyBtn.style.background = '#FFBE00';
+                            copyBtn.style.color = '#1e1e2f';
+                        }, 1500);
+                    })
+                    .catch(err => {
+                        // If Clipboard API fails, try METHOD 2
+                        fallbackCopyMethod1(code);
+                    });
+            } else {
+                // Clipboard API not available, try METHOD 2
+                fallbackCopyMethod1(code);
+            }
+        }
+        
+        // METHOD 2: Using execCommand with a temporary textarea
+        function fallbackCopyMethod1(text) {
+            try {
+                // Create temporary textarea
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                textarea.style.left = '-9999px';
+                document.body.appendChild(textarea);
+                textarea.select();
+                textarea.setSelectionRange(0, 99999); // For mobile devices
+                
+                // Execute copy command
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textarea);
+                
+                if (successful) {
+                    showToast('✅ Code copied to clipboard!');
+                    // Visual feedback
+                    const original = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> copied!';
+                    copyBtn.style.background = '#2ecc71';
+                    copyBtn.style.color = 'white';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = original;
+                        copyBtn.style.background = '#FFBE00';
+                        copyBtn.style.color = '#1e1e2f';
+                    }, 1500);
+                } else {
+                    // If execCommand fails, try METHOD 3
+                    fallbackCopyMethod2(text);
+                }
+            } catch (err) {
+                fallbackCopyMethod2(text);
+            }
+        }
+        
+        // METHOD 3: Last resort - select text and guide user
+        function fallbackCopyMethod2(text) {
+            try {
+                // Use the hidden textarea as a more persistent element
+                hiddenTextarea.value = text;
+                hiddenTextarea.style.opacity = '0';
+                hiddenTextarea.style.position = 'fixed';
+                hiddenTextarea.style.left = '0';
+                hiddenTextarea.style.top = '0';
+                hiddenTextarea.style.pointerEvents = 'none';
+                hiddenTextarea.select();
+                hiddenTextarea.setSelectionRange(0, text.length);
+                
+                // Try execCommand one more time with the hidden element
+                const successful = document.execCommand('copy');
+                
+                if (successful) {
+                    showToast('✅ Code copied to clipboard!');
+                    // Visual feedback
+                    const original = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> copied!';
+                    copyBtn.style.background = '#2ecc71';
+                    copyBtn.style.color = 'white';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = original;
+                        copyBtn.style.background = '#FFBE00';
+                        copyBtn.style.color = '#1e1e2f';
+                    }, 1500);
+                } else {
+                    // Ultimate fallback - select code in pre for manual copy
+                    showToast('📋 Please select the code and press Ctrl+C', false);
+                    
+                    // Highlight the code in the pre element
+                    const range = document.createRange();
+                    range.selectNodeContents(jsCodePre);
+                    const selection = window.getSelection();
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                }
+            } catch (err) {
+                // Absolute last resort
+                alert('Please select the code manually and press Ctrl+C to copy.');
+            }
+        }
+
+        // DOWNLOAD button functionality
+        function downloadJS() {
+            if (products.length === 0) {
+                showToast('⚠️ No products to download. Add items first.', false);
+                return;
+            }
+            const code = generateJSString(products);
+            const blob = new Blob([code], { type: 'application/javascript' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'yadav-products.js';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            // feedback on download button
+            const original = downloadBtn.innerHTML;
+            downloadBtn.innerHTML = '<i class="fas fa-check"></i> saved!';
+            downloadBtn.style.background = '#2ecc71';
+            downloadBtn.style.color = 'white';
+            setTimeout(() => {
+                downloadBtn.innerHTML = original;
+                downloadBtn.style.background = '#e8d49a';
+                downloadBtn.style.color = '#1e2a1e';
+            }, 1200);
+            
+            showToast('✅ File downloaded successfully!');
+        }
+
+        document.getElementById('addProductBtn').addEventListener('click', addProduct);
+        document.getElementById('resetDemoBtn').addEventListener('click', resetDefault);
+        copyBtn.addEventListener('click', copyCode);
+        downloadBtn.addEventListener('click', downloadJS);
+
+        // initial render (empty state)
+        refreshAll();
+    })();
+</script>
+</body>
+</html>
